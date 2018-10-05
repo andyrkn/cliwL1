@@ -1,93 +1,164 @@
-order = [];
-rid = 0;
-seconds = 5;
+cardsList = [];
+ithSelectedCard = 0;
+secondsLevel = 5;
+secondsLeft = 0;
 
-var intv;
+currentRound = 0;
+orderIndex = 0;
+
+numberOfCards = 5;
+
+// time in ms
+fadeoutTimer = 1000;
+var mainInterval, highlightingInterval;
+
+function recolor() {
+    for (let i = 1; i <= 9; i++) {
+        let name = 'bt' + i;
+        document.getElementById(name).style.backgroundColor = 'yellow';
+    }
+}
+
+function manageDifficultyLevels() {
+    let elem = document.getElementById('sefselect');
+    let diff = elem.options[elem.options.selectedIndex].innerText;
+
+    if (diff == 'Easy') {
+        fadeoutTimer = 1000;
+        secondsLevel = 5;
+    }
+    if (diff == 'Normal') {
+        fadeoutTimer = 700;
+        secondsLevel = 4;
+    }
+    if (diff == 'Hard') {
+        fadeoutTimer = 400;
+        secondsLevel = 3;
+    }
+
+    document.getElementById('htime').innerHTML = secondsLevel;
+}
+
+function init() {
+    recolor();
+    //manageDifficultyLevels();
+    changeCardsClickable('none');
+    numberOfCards = 2 + Number(currentRound);
+    secondsLeft = secondsLevel + Number(currentRound)/2;
+    ithSelectedCard = 0;
+    cardsList = [];
+    orderIndex = 0;
+    document.getElementById('htime').innerHTML = secondsLevel;
+    document.getElementById('streak').innerHTML = 'Streak: ' + currentRound;
+}
 
 function reset() {
-    for (let i = 1; i <= 9; i++) {
-        let name = 'bt' + i;
-        document.getElementById(name).style.backgroundColor = 'yellow';
-    }
-    rid = 0;
-    order = [];
+    currentRound = 0;
+    init();
 }
+
 function start() {
-    //prep
-    for (let i = 1; i <= 9; i++) {
-        let name = 'bt' + i;
-        document.getElementById(name).style.backgroundColor = 'yellow';
-    }
-    seconds = 6;
-    rid = 0;
-    order = [];
-    order.push(Math.floor((Math.random() * 9) + 1));
-    order.push(Math.floor((Math.random() * 9) + 1));
-    console.log('new game start ' + order.toString());
+    init();
 
-
-    //begin
-    document.getElementById('bt' + order[0]).style.backgroundColor = 'red';
-    setTimeout(df, 1000);
-}
-
-function df() {
-    document.getElementById('bt' + order[0]).style.backgroundColor = 'yellow';
-    document.getElementById('bt' + order[1]).style.backgroundColor = 'red';
-    setTimeout(ds, 1000);
-}
-
-function ds() {
-    document.getElementById('bt' + order[1]).style.backgroundColor = 'yellow';
-    countdown();
-}
-
-function c1(b) {
-    document.getElementById(b.id).style.backgroundColor = 'green';
-    addelement(b.id);
-}
-
-function addelement(bid) {
-    str = bid.substring(bid.length - 1, bid.length);
-    if (order[rid] == str) {
-        console.log(str + ' click correct');
-        if (rid == 1) {
-            alert('you win'); reset();
-            clearInterval(intv); return;
+    cardsList.push(Math.floor((Math.random() * 9) + 1));
+    for (let i = 0; i < numberOfCards - 1; i++) {
+        while (1) { // make sure we dont have the same card twice in a row
+            let nr = Math.floor((Math.random() * 9) + 1);
+            if (nr != cardsList[i]) {
+                cardsList.push(nr);
+                break;
+            }
         }
+    }
+    console.log('new game start ' + cardsList.toString());
 
-        rid = Number(rid) + 1;
+
+    // begin showing the card order
+    document.getElementById('bt' + cardsList[0]).style.backgroundColor = 'red';
+    highlightingInterval = setInterval(highlightCard, fadeoutTimer);
+}
+
+function highlightCard() {
+    // console.log(orderIndex + ' <- order index');
+    document.getElementById('bt' + cardsList[orderIndex]).style.backgroundColor = 'yellow';
+
+    if (orderIndex < cardsList.length - 1) {
+        orderIndex = Number(orderIndex) + 1;
+        document.getElementById('bt' + cardsList[orderIndex]).style.backgroundColor = 'red';
+    }
+    else {
+        document.getElementById('bt' + cardsList[orderIndex]).style.backgroundColor = 'yellow';
+        clearInterval(highlightingInterval);
+        countdown();
+    }
+}
+
+//card onclick event, set it as green.
+function c1(button) {
+    document.getElementById(button.id).style.backgroundColor = 'green';
+    addelement(button.id);
+}
+
+// check if the card selected is correct, if not, stop the round and call reset
+function addelement(buttonId) {
+    // remove the color off the previous card
+    if (ithSelectedCard > 0)
+        document.getElementById('bt' + cardsList[ithSelectedCard - 1]).style.backgroundColor = 'yellow';
+
+    // extract id from button eg: { id = bt9 -> str = 9 }
+    str = buttonId.substring(buttonId.length - 1, buttonId.length);
+    // check if the order is correct
+    if (cardsList[ithSelectedCard] == str) {
+        console.log(str + ' click correct');
+        if (ithSelectedCard == numberOfCards - 1) {
+            // alert('you win'); 
+            currentRound = Number(currentRound) + 1;
+            clearInterval(mainInterval);
+            start();
+            return;
+        }
+        // move to the next card in line
+        ithSelectedCard = Number(ithSelectedCard) + 1;
     } else {
         alert('wrong');
-        clearInterval(intv);
+        clearInterval(mainInterval);
         reset();
+        currentRound = 0;
     }
 }
-exception = 0;
-function pause() {
-    exception = 1;
+
+//set the cards clickable or not, with the help of 'all' and 'none'
+function changeCardsClickable(incPointerEvent) {
     for (let i = 1; i <= 9; i++) {
         let name = 'bt' + i;
-        document.getElementById(name).style.pointerEvents = 'none';
+        document.getElementById(name).style.pointerEvents = incPointerEvent;
     }
+}
+
+pauseActive = 0;
+function pause() {
+    pauseActive = 1;
+    changeCardsClickable('none');
 }
 
 function resume() {
-    exception = 0;
-    for (let i = 1; i <= 9; i++) {
-        let name = 'bt' + i;
-        document.getElementById(name).style.pointerEvents = 'all';
-    }
+    pauseActive = 0;
+    changeCardsClickable('all');
 }
 
+// fake a pause cause im bad at js, add +1(pauseActive) to the countdown so it looks like it froze but its not
 function countdown() {
-    intv = setInterval(function () {
-        if (Number(seconds) == 0) {
-            clearInterval(intv);
+    // unlock the buttons and start the game
+    changeCardsClickable('all');
+    // main countdown responsable with the game
+    mainInterval = setInterval(function () {
+        if (Number(secondsLeft) == 0) {
+            clearInterval(mainInterval);
             alert('defeat');
             reset();
+        } else {
+            secondsLeft = Number(secondsLeft) - 1 + Number(pauseActive);
+            document.getElementById('htime').innerHTML = secondsLeft;
         }
-        seconds = Number(seconds) - 1 + Number(exception);
-        document.getElementById('htime').innerHTML = seconds;
     }, 1000);
 }

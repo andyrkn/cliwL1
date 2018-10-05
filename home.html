@@ -25,7 +25,7 @@
     </div>
 
     <div class="startcase">
-        <select class="thing">
+        <select id="sefselect" class="thing" onchange="manageDifficultyLevels()">
             <option>Easy</option>
             <option>Normal</option>
             <option>Hard</option>
@@ -33,10 +33,9 @@
         <button class="thing" onclick="start()">start</button>
         <button class="thing" onclick="pause()">pause</button>
         <button class="thing" onclick="resume()">resume</button>
-
-
         <p>Time Left</p>
         <p id="htime">5</p>
+        <h2 id="streak">Streak: 0</h2>
     </div>
 </body>
 

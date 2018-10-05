@@ -48,7 +48,7 @@ function init() {
     ithSelectedCard = 0;
     cardsList = [];
     orderIndex = 0;
-    document.getElementById('htime').innerHTML = secondsLevel;
+    document.getElementById('htime').innerHTML = secondsLeft;
     document.getElementById('streak').innerHTML = 'Streak: ' + currentRound;
 }
 

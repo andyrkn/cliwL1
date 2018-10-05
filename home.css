@@ -1,0 +1,30 @@
+.wrap {
+    width: 500px;
+}
+
+.btn {
+    margin-left: 50px;
+    margin-top: 50px;
+    width: 100px;
+    height: 100px;
+    float: left;
+    background-color: yellow;
+    font-size: 20px;
+    pointer-events: all;
+}
+
+.start {
+    margin-top: 200px;
+    float: left;
+}
+
+.startcase {
+    margin-left: 100px;
+    float: left;
+    width: 100px;
+    height: 200px;
+}
+
+.thing {
+    width: 100%;
+}

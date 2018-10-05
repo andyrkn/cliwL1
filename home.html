@@ -1,0 +1,43 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>home</title>
+
+    <link rel="stylesheet" type="text/css" href="home.css" />
+    <script src="home.js"></script>
+</head>
+
+<body>
+    <div class="wrap">
+        <button id="bt1" class="btn" onclick="c1(bt1)">1</button>
+        <button id="bt2" class="btn" onclick="c1(bt2)">2</button>
+        <button id="bt3" class="btn" onclick="c1(bt3)">3</button>
+
+        <button id="bt4" class="btn" onclick="c1(bt4)">4</button>
+        <button id="bt5" class="btn" onclick="c1(bt5)">5</button>
+        <button id="bt6" class="btn" onclick="c1(bt6)">6</button>
+
+        <button id="bt7" class="btn" onclick="c1(bt7)">7</button>
+        <button id="bt8" class="btn" onclick="c1(bt8)">8</button>
+        <button id="bt9" class="btn" onclick="c1(bt9)">9</button>
+    </div>
+
+    <div class="startcase">
+        <select class="thing">
+            <option>Easy</option>
+            <option>Normal</option>
+            <option>Hard</option>
+        </select>
+        <button class="thing" onclick="start()">start</button>
+        <button class="thing" onclick="pause()">pause</button>
+        <button class="thing" onclick="resume()">resume</button>
+
+
+        <p>Time Left</p>
+        <p id="htime">5</p>
+    </div>
+</body>
+
+</html>

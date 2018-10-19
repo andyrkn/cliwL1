@@ -1,0 +1,43 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>home</title>
+
+    <link rel="stylesheet" type="text/css" href="home.css" />
+</head>
+
+<body>
+    <div id="wrapper" class="wrap">
+        <button data-action="1" class="btn">1</button>
+        <button data-action="2" class="btn">2</button>
+        <button data-action="3" class="btn">3</button>
+
+        <button data-action="4" class="btn">4</button>
+        <button data-action="5" class="btn">5</button>
+        <button data-action="6" class="btn">6</button>
+
+        <button data-action="7" class="btn">7</button>
+        <button data-action="8" class="btn">8</button>
+        <button data-action="9" class="btn">9</button>
+    </div>
+
+    <div class="startcase">
+        <select id="sefselect" class="thing" onchange="manageDifficultyLevels()">
+            <option>Easy</option>
+            <option>Normal</option>
+            <option>Hard</option>
+        </select>
+        <button class="thing" onclick="start()">start</button>
+        <button class="thing" onclick="pause()">pause</button>
+        <button class="thing" onclick="resume()">resume</button>
+        <p>Time Left</p>
+        <p id="htime">5</p>
+        <h2 id="streak">Streak: 0</h2>
+    </div>
+
+    <script src="home.js"></script>
+</body>
+
+</html>
